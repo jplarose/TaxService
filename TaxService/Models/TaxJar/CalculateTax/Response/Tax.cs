@@ -8,19 +8,19 @@ namespace TaxService.Models.TaxJar
     public class Tax
     {
         [JsonProperty("order_total_amount")]
-        public float? OrderTotalAmount { get; set; }
+        public decimal OrderTotalAmount { get; set; }
 
         [JsonProperty("shipping")]
-        public float? Shipping { get; set; }
+        public decimal Shipping { get; set; }
 
         [JsonProperty("taxable_amount")]
-        public float? TaxableAmount { get; set; }
+        public decimal TaxableAmount { get; set; }
 
         [JsonProperty("amount_to_collect")]
-        public float? AmountToCollect { get; set; }
+        public decimal AmountToCollect { get; set; }
 
         [JsonProperty("rate")]
-        public float? Rate { get; set; }
+        public decimal Rate { get; set; }
 
         [JsonProperty("has_nexus")]
         public bool HasNexus { get; set; }
