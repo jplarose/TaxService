@@ -8,19 +8,19 @@ namespace TaxService.Models.TaxJar
     public class Tax
     {
         [JsonProperty("order_total_amount")]
-        public double OrderTotalAmount { get; set; }
+        public float? OrderTotalAmount { get; set; }
 
         [JsonProperty("shipping")]
-        public double Shipping { get; set; }
+        public float? Shipping { get; set; }
 
         [JsonProperty("taxable_amount")]
-        public int TaxableAmount { get; set; }
+        public float? TaxableAmount { get; set; }
 
         [JsonProperty("amount_to_collect")]
-        public double AmountToCollect { get; set; }
+        public float? AmountToCollect { get; set; }
 
         [JsonProperty("rate")]
-        public double Rate { get; set; }
+        public float? Rate { get; set; }
 
         [JsonProperty("has_nexus")]
         public bool HasNexus { get; set; }
@@ -30,6 +30,9 @@ namespace TaxService.Models.TaxJar
 
         [JsonProperty("tax_source")]
         public string TaxSource { get; set; }
+
+        [JsonProperty("exemption_type")]
+        public string ExemptionType { get; set; }
 
         [JsonProperty("jurisdictions")]
         public Jurisdictions Jurisdictions { get; set; }

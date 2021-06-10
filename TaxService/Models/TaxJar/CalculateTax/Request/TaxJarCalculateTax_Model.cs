@@ -38,10 +38,10 @@ namespace TaxService.Models.TaxJar
         public string ToStreet { get; set; }
 
         [JsonProperty("amount")]
-        public float? Amount { get; set; }
+        public decimal? Amount { get; set; }
 
         [JsonProperty("shipping")]
-        public float Shipping { get; set; }
+        public decimal Shipping { get; set; }
 
         [JsonProperty("customer_id")]
         public string CustomerID { get; set; }

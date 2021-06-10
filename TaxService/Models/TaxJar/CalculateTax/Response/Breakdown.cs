@@ -7,52 +7,91 @@ namespace TaxService.Models.TaxJar
 {
     public class Breakdown
     {
+        // US/General Breakdown Fields
+
         [JsonProperty("taxable_amount")]
-        public int TaxableAmount { get; set; }
+        public decimal? TaxableAmount { get; set; }
 
         [JsonProperty("tax_collectable")]
-        public double TaxCollectable { get; set; }
+        public decimal? TaxCollectable { get; set; }
 
         [JsonProperty("combined_tax_rate")]
-        public double CombinedTaxRate { get; set; }
+        public decimal? CombinedTaxRate { get; set; }
 
         [JsonProperty("state_taxable_amount")]
-        public int StateTaxableAmount { get; set; }
+        public decimal? StateTaxableAmount { get; set; }
 
         [JsonProperty("state_tax_rate")]
-        public double StateTaxRate { get; set; }
+        public decimal? StateTaxRate { get; set; }
 
         [JsonProperty("state_tax_collectable")]
-        public double StateTaxCollectable { get; set; }
+        public decimal? StateTaxCollectable { get; set; }
 
         [JsonProperty("county_taxable_amount")]
-        public int CountyTaxableAmount { get; set; }
+        public decimal? CountyTaxableAmount { get; set; }
 
         [JsonProperty("county_tax_rate")]
-        public double CountyTaxRate { get; set; }
+        public decimal? CountyTaxRate { get; set; }
 
         [JsonProperty("county_tax_collectable")]
-        public double CountyTaxCollectable { get; set; }
+        public decimal? CountyTaxCollectable { get; set; }
 
         [JsonProperty("city_taxable_amount")]
-        public int CityTaxableAmount { get; set; }
+        public decimal? CityTaxableAmount { get; set; }
 
         [JsonProperty("city_tax_rate")]
-        public int CityTaxRate { get; set; }
+        public decimal? CityTaxRate { get; set; }
 
         [JsonProperty("city_tax_collectable")]
-        public int CityTaxCollectable { get; set; }
+        public decimal? CityTaxCollectable { get; set; }
 
         [JsonProperty("special_district_taxable_amount")]
-        public int SpecialDistrictTaxableAmount { get; set; }
+        public decimal? SpecialDistrictTaxableAmount { get; set; }
 
         [JsonProperty("special_tax_rate")]
-        public double SpecialTaxRate { get; set; }
+        public decimal? SpecialTaxRate { get; set; }
 
         [JsonProperty("special_district_tax_collectable")]
-        public double SpecialDistrictTaxCollectable { get; set; }
+        public decimal? SpecialDistrictTaxCollectable { get; set; }
 
         [JsonProperty("line_items")]
         public List<LineItem> LineItems { get; set; }
+
+        // Canada specific fields
+
+        [JsonProperty("gst_taxable_amount")]
+        public decimal? GstTaxableAmount { get; set; }
+
+        [JsonProperty("gst_tax_rate")]
+        public decimal? GstTaxRate { get; set; }
+
+        [JsonProperty("gst")]
+        public decimal? Gst { get; set; }
+
+        [JsonProperty("pst_taxable_amount")]
+        public decimal? PstTaxableAmount { get; set; }
+
+        [JsonProperty("pst_tax_rate")]
+        public decimal? PstTaxRate { get; set; }
+
+        [JsonProperty("pst")]
+        public decimal? Pst { get; set; }
+
+        [JsonProperty("qst_tax_rate")]
+        public decimal? QstTaxRate { get; set; }
+
+        [JsonProperty("qst")]
+        public decimal? Qst { get; set; }
+
+        // International Specific Fields
+
+        [JsonProperty("country_taxable_amount")]
+        public decimal? CountryTaxableAmount { get; set; }
+
+        [JsonProperty("country_tax_rate")]
+        public decimal? CountryTaxRate { get; set; }
+
+        [JsonProperty("country_tax_collectable")]
+        public decimal? CountryTaxCollectable { get; set; }
     }
 }
