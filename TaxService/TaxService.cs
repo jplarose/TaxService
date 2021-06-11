@@ -25,7 +25,6 @@ namespace TaxService
 
                     if (calculateTax_Model != null)
                     {
-                        // Call over to TaxJar specific logic with it
                         return await taxJarLogic.CalculateTax(calculateTax_Model);
                     }
                     else
@@ -34,27 +33,30 @@ namespace TaxService
                         throw new Exception("Invalid TaxJar Calculate Tax model provided for Request.");
                     }
                 default:
-                    // Not a valid Tax Calculator provided
-                    // Create an error response and return it
-                    break;
+                    throw new Exception("Invalid Request");
             }
-
-            return 1;
         }
 
-        public async Task<string> GetLocationTaxRates()
+        public async Task<decimal> GetLocationTaxRates(TaxJarRatesRequest_Model taxJarRatesRequest_Model)
         {
             switch (_taxCalculators)
             {
                 case TaxCalculators.TaxJar:
-                    break;
-                default:
-                    // Not a valid Tax Calculator provided
-                    // Create an error response and return it
-                    break;
-            }
+                    // Initialize the TaxJar logic class
+                    TaxJarLogic taxJarLogic = new TaxJarLogic();
 
-            return "";
+                    if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.ZIP))
+                    {
+                        return await taxJarLogic.GetLocationTaxRates(taxJarRatesRequest_Model);
+                    }
+                    else
+                    {
+                        // Whatever is consuming this can handle the error thrown
+                        throw new Exception("ZIP Code required for request");
+                    }
+                default:
+                    throw new Exception("Invalid Request");
+            }
         }
 
     }
