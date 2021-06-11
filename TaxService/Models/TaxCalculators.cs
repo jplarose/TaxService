@@ -4,10 +4,11 @@ using System.Text;
 
 namespace TaxService.Models
 {
+    /// <summary>
+    /// Extendable list of the available Tax Calculators
+    /// </summary>
     public enum TaxCalculators
     {
-        // Currently TaxJar is the only known service
-        // To be expanded as needed
         TaxJar = 0
     }
 }

@@ -13,13 +13,14 @@ namespace TaxService.Logic
     {
         private RestClient client;
 
+        /// <summary>
+        /// Create the RestSharp client with the Authorization as a default header for all requests
+        /// Hard coding here, in real situation there would be a global config in the consuming application where these are stored
+        /// </summary>
         public TaxJarLogic()
         {
-            // Create the RestSharp client with the Authorization as a default header for all requests
-            // Hard coding here, in real situation there would be a global config in the consuming application where these are stored
             client = new RestClient("https://api.taxjar.com/v2");
-            client.AddDefaultHeader("Authorization", $"Bearer 5da2f821eee4035db4771edab942a4cc");
-            client.UseNewtonsoftJson();
+            client.AddDefaultHeader("Authorization", "Bearer 5da2f821eee4035db4771edab942a4cc");
         }
 
         public async Task<decimal> CalculateTax (TaxJarCalculateTax_Model taxJarCalculateTax_Model)
@@ -47,7 +48,12 @@ namespace TaxService.Logic
             return response.Rate.CombinedRate;
         }
 
-        // Method to add the additional optional parameters to the GET request
+        
+        /// <summary>
+        /// Method to add the additional optional parameters to the GET request
+        /// </summary>
+        /// <param name="taxJarRatesRequest_Model"></param>
+        /// <param name="request"></param>
         private void LocationTaxRatesURLBuilder (TaxJarRatesRequest_Model taxJarRatesRequest_Model, RestRequest request)
         {
             if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.Country))

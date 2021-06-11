@@ -29,7 +29,22 @@ namespace TaxServiceUnitTests
         [ExpectedException(typeof(Exception))]
         public async Task LocationTaxRatesRequest_NoZIP()
         {
+            // No ZIP defined, it is a required field. Should throw Exception
             TaxJarRatesRequest_Model request = new TaxJarRatesRequest_Model();
+
+            decimal response = await taxServiceTaxJar.GetLocationTaxRates(request);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public async Task LocationTaxRatesRequest_NoZIPButOtherInfo()
+        {
+            // No ZIP defined, it is a required field. Should throw Exception
+            TaxJarRatesRequest_Model request = new TaxJarRatesRequest_Model
+            {
+                Country = "US",
+                State = "ME"
+            };
 
             decimal response = await taxServiceTaxJar.GetLocationTaxRates(request);
         }
@@ -48,6 +63,7 @@ namespace TaxServiceUnitTests
 
             decimal response = await taxServiceTaxJar.GetLocationTaxRates(request);
 
+            // Value determined via independent test from a Postman request
             Assert.AreEqual(0.055m, response);
 
         }

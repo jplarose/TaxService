@@ -13,7 +13,12 @@ namespace TaxService
         {
             _taxCalculators = taxCalculators;
         }
-
+        /// <summary>
+        /// Method to calculate the total tax on a sale, extensible by including optional parameters ans switching based 
+        /// on the calculator it was initialized with
+        /// </summary>
+        /// <param name="calculateTax_Model"></param>
+        /// <returns>A decimal representation of tax calculated based on the information provided</returns>
         public async Task<decimal> CalculateTax(TaxJarCalculateTax_Model calculateTax_Model = null)
         {
 
@@ -37,6 +42,11 @@ namespace TaxService
             }
         }
 
+        /// <summary>
+        /// Method to get the tax for a specific location provided by the user
+        /// </summary>
+        /// <param name="taxJarRatesRequest_Model"></param>
+        /// <returns>A decimal representation of the tax for the specified location</returns>
         public async Task<decimal> GetLocationTaxRates(TaxJarRatesRequest_Model taxJarRatesRequest_Model)
         {
             switch (_taxCalculators)

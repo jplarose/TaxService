@@ -18,7 +18,7 @@ namespace TaxServiceUnitTests
 
             TaxJarCalculateTax_Model request = new TaxJarCalculateTax_Model
             {
-                Amount = 15.00m,
+                Amount = 15,
                 ToCountry = "US",
                 ToZip = "90002",
                 ToState = "CA",
@@ -33,6 +33,8 @@ namespace TaxServiceUnitTests
             decimal response = await taxServiceTaxJar.CalculateTax(request);
 
             Assert.IsNotNull(response);
+
+            // Value determined via independent test from a Postman request 
             Assert.AreEqual(response, 1.54m);
         }
 
