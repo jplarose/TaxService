@@ -10,4 +10,9 @@
     <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="106.11.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TaxService.DataAccess\TaxService.DataAccess.csproj" />
+    <ProjectReference Include="..\TaxService.Models\TaxService.Models.csproj" />
+  </ItemGroup>
+
 </Project>
