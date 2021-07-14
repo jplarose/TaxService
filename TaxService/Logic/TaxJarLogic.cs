@@ -1,37 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestSharp;
-using RestSharp.Serializers.NewtonsoftJson;
 using TaxService.Models.TaxJar;
+using TaxService.DataAccess.TaxJar;
 
 namespace TaxService.Logic
 {
     public class TaxJarLogic
     {
         private RestClient client;
+        private ITaxJarDAL _taxJarDAL;
 
         /// <summary>
         /// Create the RestSharp client with the Authorization as a default header for all requests
         /// Hard coding here, in real situation there would be a global config in the consuming application where these are stored
         /// </summary>
-        public TaxJarLogic()
+        public TaxJarLogic(ITaxJarDAL taxJarDAL)
         {
-            client = new RestClient("https://api.taxjar.com/v2");
-            client.AddDefaultHeader("Authorization", "Bearer 5da2f821eee4035db4771edab942a4cc");
+            _taxJarDAL = taxJarDAL;
         }
 
         public async Task<decimal> CalculateTax (TaxJarCalculateTax_Model taxJarCalculateTax_Model)
         {
-            string jsonBody = JsonConvert.SerializeObject(taxJarCalculateTax_Model);
-
-            var request = new RestRequest("/taxes", Method.POST);
-            request.AddJsonBody(jsonBody);
-
-            var response = await client.PostAsync<TaxJarCalculateTaxResponse_Model>(request);
-
+            var response = await _taxJarDAL.CalculateTax(taxJarCalculateTax_Model);
             
             return response.Tax.AmountToCollect;
         }
@@ -40,7 +31,7 @@ namespace TaxService.Logic
         {
             var request = new RestRequest($"/rates/{taxJarRatesRequest_Model.ZIP}", Method.GET);
 
-            // Build out the rest of the URL if the optional Params are included
+            // Build out the rest of the URL if the optional Params are included -- Still do this here in the Logic class
             LocationTaxRatesURLBuilder(taxJarRatesRequest_Model, request);
 
             var response = await client.GetAsync<TaxJarRatesResponse_Model>(request);
