@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using RestSharp;
 using TaxService.Models.TaxJar;
 using TaxService.DataAccess.TaxJar;
+using System.Text;
+using System.Collections.Generic;
 
 namespace TaxService.Logic
 {
@@ -29,40 +31,51 @@ namespace TaxService.Logic
 
         public async Task<decimal> GetLocationTaxRates(TaxJarRatesRequest_Model taxJarRatesRequest_Model)
         {
-            var request = new RestRequest($"/rates/{taxJarRatesRequest_Model.ZIP}", Method.GET);
+            // Build out the URL if the optional Params are included
+            string populatedURL = LocationTaxRatesURLBuilder(taxJarRatesRequest_Model);
 
-            // Build out the rest of the URL if the optional Params are included -- Still do this here in the Logic class
-            LocationTaxRatesURLBuilder(taxJarRatesRequest_Model, request);
-
-            var response = await client.GetAsync<TaxJarRatesResponse_Model>(request);
-
+            var response = await _taxJarDAL.GetLocationTaxRates(populatedURL);
+                                
             return response.Rate.CombinedRate;
         }
 
         
         /// <summary>
-        /// Method to add the additional optional parameters to the GET request
+        /// Method to add the additional optional parameters to the GET request URL
         /// </summary>
         /// <param name="taxJarRatesRequest_Model"></param>
-        /// <param name="request"></param>
-        private void LocationTaxRatesURLBuilder (TaxJarRatesRequest_Model taxJarRatesRequest_Model, RestRequest request)
+        private string LocationTaxRatesURLBuilder (TaxJarRatesRequest_Model taxJarRatesRequest_Model)
         {
+            StringBuilder urlBuilder = new StringBuilder();
+            List<string> parametersToAdd = new List<string>();
+
             if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.Country))
             {
-                request.AddParameter("country", taxJarRatesRequest_Model.Country);
+                parametersToAdd.Add($"country={taxJarRatesRequest_Model.Country}");               
             }
             if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.City))
             {
-                request.AddParameter("city", taxJarRatesRequest_Model.City);
+                parametersToAdd.Add($"city={taxJarRatesRequest_Model.City}");
             }
             if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.State))
             {
-                request.AddParameter("state", taxJarRatesRequest_Model.State);
+                parametersToAdd.Add($"state={taxJarRatesRequest_Model.State}");
             }
             if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.Street))
             {
-                request.AddParameter("street", taxJarRatesRequest_Model.Street);
+                parametersToAdd.Add($"street={taxJarRatesRequest_Model.Street}");
             }
+
+            urlBuilder.Append((parametersToAdd.Count > 0) ? $"{taxJarRatesRequest_Model.ZIP}?" : taxJarRatesRequest_Model.ZIP);
+
+            for (int index = 0; index < parametersToAdd.Count; index++ )
+            {
+                urlBuilder.Append(index > 0 ? "&" : string.Empty);
+
+                urlBuilder.Append(parametersToAdd[index]);
+            }
+
+            return urlBuilder.ToString();
         }
     }
 }
