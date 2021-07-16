@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxService", "TaxService\Ta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxServiceUnitTests", "TaxServiceUnitTests\TaxServiceUnitTests.csproj", "{CC633102-62F5-4A70-A354-3C6A7ACEFF0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxService.DataAccess", "TaxService.DataAccess\TaxService.DataAccess.csproj", "{71D2608B-ED0B-4D32-B376-C50A264D544F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxService.DataAccess", "TaxService.DataAccess\TaxService.DataAccess.csproj", "{71D2608B-ED0B-4D32-B376-C50A264D544F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxService.Models", "TaxService.Models\TaxService.Models.csproj", "{B0B8AE2C-74B7-474E-966C-4881CA301713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxService.Models", "TaxService.Models\TaxService.Models.csproj", "{B0B8AE2C-74B7-474E-966C-4881CA301713}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
