@@ -3,15 +3,18 @@ using System.Threading.Tasks;
 using TaxService.Logic;
 using TaxService.Models;
 using TaxService.Models.TaxJar;
+using TaxService.DataAccess.TaxJar;
 
 namespace TaxService
 {
     public class TaxService
     {
         TaxCalculators _taxCalculators;
-        public TaxService(TaxCalculators taxCalculators)
+        ITaxJarDAL _taxJarDAL;
+        public TaxService(TaxCalculators taxCalculators, ITaxJarDAL taxJarDAL)
         {
             _taxCalculators = taxCalculators;
+            _taxJarDAL = taxJarDAL;
         }
         /// <summary>
         /// Method to calculate the total tax on a sale, extensible by including optional parameters ans switching based 
@@ -26,7 +29,7 @@ namespace TaxService
             {
                 case TaxCalculators.TaxJar:
                     // Initialize the TaxJar logic class
-                    TaxJarLogic taxJarLogic = new TaxJarLogic();
+                    TaxJarLogic taxJarLogic = new TaxJarLogic(_taxJarDAL);
 
                     if (calculateTax_Model != null)
                     {
@@ -53,7 +56,7 @@ namespace TaxService
             {
                 case TaxCalculators.TaxJar:
                     // Initialize the TaxJar logic class
-                    TaxJarLogic taxJarLogic = new TaxJarLogic();
+                    TaxJarLogic taxJarLogic = new TaxJarLogic(_taxJarDAL);
 
                     if (!string.IsNullOrEmpty(taxJarRatesRequest_Model.ZIP))
                     {
