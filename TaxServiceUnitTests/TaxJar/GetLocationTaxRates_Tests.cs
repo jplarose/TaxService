@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TaxService.Models.TaxJar;
 using Moq;
 using Xunit;
-using TaxService.DataAccess.TaxJar;
+using TaxService.Models.Models.Domain;
 
 namespace TaxServiceUnitTests
 {
@@ -15,36 +14,25 @@ namespace TaxServiceUnitTests
     {
         private class Setup
         {
-            public Mock<ITaxJarDAL> mockTaxJarDAL = new Mock<ITaxJarDAL>();
             public readonly TaxService.TaxService taxServiceTaxJar;
             public Setup()
             {
-                taxServiceTaxJar = new TaxService.TaxService(TaxService.Models.TaxCalculators.TaxJar, mockTaxJarDAL.Object);
+                taxServiceTaxJar = new TaxService.TaxService(TaxService.Models.TaxCalculators.TaxJar);
             }
 
-            public TaxJarRatesResponse_Model getMockTaxJarRatesResponse(string zip, decimal expectedRateResponse)
+            public TaxServiceRequest getMockTaxJarRatesRequest (string zip = null, string state = null, string city = null, string country = null, string street = null)
             {
-                TaxJarRatesResponse_Model response = new TaxJarRatesResponse_Model()
+                return new TaxServiceRequest()
                 {
-                    Rate = new RatesResponseAttributes()
+                    Customer = new Customer()
                     {
-                        CombinedRate = expectedRateResponse,
-                        Zip = zip
+                        ZipCode = zip,
+                        State = state,
+                        City = city,
+                        Country = country,
+                        StreetAddress = street
                     }
-                };
-
-                return response;
-            }
-
-            public TaxJarRatesRequest_Model getMockTaxJarRatesRequest (string zip = null, string state = null, string city = null, string country = null, string street = null)
-            {
-                return new TaxJarRatesRequest_Model()
-                {
-                    ZIP = zip,
-                    State = state,
-                    City = city,
-                    Country = country,
-                    Street = street
+                    
                 };
             }
         }
@@ -55,11 +43,7 @@ namespace TaxServiceUnitTests
         public async Task ValidLocationTaxRatesRequest()
         {
             Setup setup = new Setup();
-            var taxJarRatesResponse = setup.getMockTaxJarRatesResponse("04062", 0.055m);
-            var mockRatesRequest = setup.getMockTaxJarRatesRequest("04062");
-
-            setup.mockTaxJarDAL.Setup(x => x.GetLocationTaxRates(It.IsAny<string>())).Returns(Task.FromResult(taxJarRatesResponse));
-            
+            var mockRatesRequest = setup.getMockTaxJarRatesRequest("04062");            
 
             decimal response = await setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest);
 
@@ -74,13 +58,10 @@ namespace TaxServiceUnitTests
         {
 
             Setup setup = new Setup();
-            var taxJarRatesResponse = setup.getMockTaxJarRatesResponse("04062", 0.055m);
             var mockRatesRequest = setup.getMockTaxJarRatesRequest();
 
-            setup.mockTaxJarDAL.Setup(x => x.GetLocationTaxRates(It.IsAny<string>())).Returns(Task.FromResult(taxJarRatesResponse));
-            
-            // No ZIP defined, it is a required field. Should throw Exception
-            await Assert.ThrowsAsync<Exception>(() =>  setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
+            // No ZIP defined, it is a required field. Should throw NullReferenceException
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>  setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
         }
 
         //[TestMethod]
@@ -90,13 +71,10 @@ namespace TaxServiceUnitTests
         public async Task LocationTaxRatesRequest_NoZIPButOtherInfo()
         {
             Setup setup = new Setup();
-            var taxJarRatesResponse = setup.getMockTaxJarRatesResponse("04062", 0.055m);
             var mockRatesRequest = setup.getMockTaxJarRatesRequest(null, "ME", null, "US");
 
-            setup.mockTaxJarDAL.Setup(x => x.GetLocationTaxRates(It.IsAny<string>())).Returns(Task.FromResult(taxJarRatesResponse));
-
-            // No ZIP defined, it is a required field. Should throw Exception
-            await Assert.ThrowsAsync<Exception>(() => setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
+            // No ZIP defined, it is a required field. Should throw NullReferenceException
+            await Assert.ThrowsAsync<InvalidOperationException>(() => setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
         }
 
         //[TestMethod]
@@ -105,10 +83,8 @@ namespace TaxServiceUnitTests
         public async Task LocationTaxRatesRequest_FullInfo()
         {           
             Setup setup = new Setup();
-            var taxJarRatesResponse = setup.getMockTaxJarRatesResponse("04062", 0.055m);
             var mockRatesRequest = setup.getMockTaxJarRatesRequest("04062", "ME", "Windham", "US", "73 Whites Bridge Road");
 
-            setup.mockTaxJarDAL.Setup(x => x.GetLocationTaxRates(It.IsAny<string>())).Returns(Task.FromResult(taxJarRatesResponse));
 
             decimal response = await setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest);
 

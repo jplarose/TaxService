@@ -1,12 +1,11 @@
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using TaxService;
-using TaxService.Models.TaxJar;
-using TaxService.Logic;
 using System.Threading.Tasks;
 using Moq;
 using Xunit;
-using TaxService.DataAccess.TaxJar;
+using TaxService.Models.Models.Domain;
+using TaxServiceProvider.TaxJar.Models;
 
 namespace TaxServiceUnitTests
 {
@@ -15,28 +14,25 @@ namespace TaxServiceUnitTests
     {
         private class Setup
         {
-            public Mock<ITaxJarDAL> mockTaxJarDAL = new Mock<ITaxJarDAL>();
             public readonly TaxService.TaxService taxServiceTaxJar;
 
             public Setup()
             {
-                taxServiceTaxJar = new TaxService.TaxService(TaxService.Models.TaxCalculators.TaxJar, mockTaxJarDAL.Object);
+                taxServiceTaxJar = new TaxService.TaxService(TaxService.Models.TaxCalculators.TaxJar);
             }
 
-            public TaxJarCalculateTax_Model getValidMockCalculateTaxModel()
+            public TaxServiceRequest getvalidTaxServiceRequest()
             {
-                return new TaxJarCalculateTax_Model()
+                return new TaxServiceRequest()
                 {
-                    Amount = 15,
-                    ToCountry = "US",
-                    ToZip = "90002",
-                    ToState = "CA",
+                    SaleAmount = 15,
                     Shipping = 1.5m,
-                    FromCity = "La Jolla",
-                    FromCountry = "US",
-                    FromState = "CA",
-                    FromStreet = "9500 Gilman Drive",
-                    FromZip = "92093"
+                    Customer = new Customer
+                    {
+                        ZipCode = "90002",
+                        Country = "US",
+                        State = "CA"
+                    }
                 };
             }
 
@@ -57,31 +53,26 @@ namespace TaxServiceUnitTests
         [Trait("Category", "UnitTest")]
         public async Task ValidTaxCalculatorRequest()
         {
+            // Arrange
             var setup = new Setup();
-            var mockCalculateTaxRequest = setup.getValidMockCalculateTaxModel();
-            var mockCalculateTaxResponse = setup.getMockCalculateTaxResponse();
+            var mockCalculateTaxRequest = setup.getvalidTaxServiceRequest();
 
-            setup.mockTaxJarDAL.Setup(x => x.CalculateTax(It.IsAny<TaxJarCalculateTax_Model>())).Returns(Task.FromResult(mockCalculateTaxResponse));
+            // Act
+            var response = await setup.taxServiceTaxJar.CalculateTax(mockCalculateTaxRequest);
 
-            decimal response = await setup.taxServiceTaxJar.CalculateTax(mockCalculateTaxRequest);
-
-            // Value determined via independent test from a Postman request 
-            Assert.Equal(1.54m, response);
+            // Assert
+            Assert.NotNull(response);
         }
 
-        [Fact(DisplayName = "InvalidTaxCalculatorRequest")]
+        [Fact(DisplayName = "InvalidTaxRequestObject")]
         [Trait("Category", "UnitTest")]
-        public async Task InvalidTaxCalculatorRequest()
+        public async Task InvalidTaxRequestObject()
         {
             var setup = new Setup();
-            var mockCalculateTaxResponse = setup.getMockCalculateTaxResponse();
-
-            setup.mockTaxJarDAL.Setup(x => x.CalculateTax(It.IsAny<TaxJarCalculateTax_Model>())).Returns(Task.FromResult(mockCalculateTaxResponse));
+            TaxServiceRequest request = null;
 
             // No request object passed in, returns exception
-            Exception ex = await Assert.ThrowsAsync<Exception>(() => setup.taxServiceTaxJar.CalculateTax());
-
-            Assert.Equal("Invalid TaxJar Calculate Tax model provided for Request.", ex.Message);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => setup.taxServiceTaxJar.CalculateTax(request));
         }
 
     }

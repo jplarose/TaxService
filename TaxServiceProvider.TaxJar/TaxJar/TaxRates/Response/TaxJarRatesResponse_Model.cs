@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace TaxService.Models.TaxJar
+namespace TaxServiceProvider.TaxJar.Models
 {
     public class TaxJarRatesResponse_Model
     {
