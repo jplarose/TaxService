@@ -36,7 +36,12 @@ namespace TaxService
         /// <returns>A decimal representation of tax calculated based on the information provided</returns>
         public async Task<decimal> CalculateTax(TaxServiceRequest calculateTaxRequest)
         {
-            if (calculateTaxRequest == null)
+            // At minimum you need to have a sale amount, country, state, and zip code to determine the tax
+            if (calculateTaxRequest == null 
+                || calculateTaxRequest.SaleAmount.Equals(0) 
+                || String.IsNullOrEmpty(calculateTaxRequest.Customer?.ZipCode) 
+                || String.IsNullOrEmpty(calculateTaxRequest.Customer?.Country)
+                || String.IsNullOrEmpty(calculateTaxRequest.Customer?.State))
             {
                 throw new InvalidOperationException("Invalid Object Provided");
             }
