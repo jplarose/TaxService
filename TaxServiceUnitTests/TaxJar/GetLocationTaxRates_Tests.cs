@@ -1,15 +1,11 @@
-﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
-using Moq;
 using Xunit;
 using TaxService.Models.Models.Domain;
+using TaxServiceProvider.TaxJar;
 
 namespace TaxServiceUnitTests
 {
-    //[TestClass]
     public class GetLocationTaxRates_Tests
     {
         private class Setup
@@ -17,7 +13,7 @@ namespace TaxServiceUnitTests
             public readonly TaxService.TaxService taxServiceTaxJar;
             public Setup()
             {
-                taxServiceTaxJar = new TaxService.TaxService(TaxService.Models.TaxCalculators.TaxJar);
+                taxServiceTaxJar = new TaxService.TaxService(new TaxJarServiceProvider());
             }
 
             public TaxServiceRequest getMockTaxJarRatesRequest (string zip = null, string state = null, string city = null, string country = null, string street = null)
@@ -37,7 +33,7 @@ namespace TaxServiceUnitTests
             }
         }
 
-        //[TestMethod]
+
         [Fact(DisplayName = "ValidLocationTaxRatesRequest")]
         [Trait("Category", "UnitTest")]
         public async Task ValidLocationTaxRatesRequest()
@@ -50,8 +46,6 @@ namespace TaxServiceUnitTests
             Assert.Equal(0.055m, response);
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(Exception))]
         [Fact(DisplayName = "LocationTaxRatesRequest_NoZIP")]
         [Trait("Category", "UnitTest")]
         public async Task LocationTaxRatesRequest_NoZIP()
@@ -64,8 +58,6 @@ namespace TaxServiceUnitTests
             await Assert.ThrowsAsync<InvalidOperationException>(() =>  setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(Exception))]
         [Fact(DisplayName = "LocationTaxRatesRequest_NoZIPButOtherInfo")]
         [Trait("Category", "UnitTest")]
         public async Task LocationTaxRatesRequest_NoZIPButOtherInfo()
@@ -77,7 +69,6 @@ namespace TaxServiceUnitTests
             await Assert.ThrowsAsync<InvalidOperationException>(() => setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
         }
 
-        //[TestMethod]
         [Fact(DisplayName = "LocationTaxRatesRequest_FullInfo")]
         [Trait("Category", "UnitTest")]
         public async Task LocationTaxRatesRequest_FullInfo()

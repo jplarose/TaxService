@@ -5,28 +5,13 @@ using TaxService.Models.Models.Domain;
 
 namespace TaxService
 {
-    public class TaxService
+    public class TaxService : ITaxService
     {
-        readonly ITaxServiceProviderBase taxServiceProvider;
+        readonly ITaxServiceProvider _taxServiceProvider;
 
-        public TaxService(TaxCalculators taxCalculators)
+        public TaxService(ITaxServiceProvider taxServiceProvider)
         {
-            taxServiceProvider = getTaxServiceProvider(taxCalculators);
-        }
-
-        private ITaxServiceProviderBase getTaxServiceProvider(TaxCalculators calculator)
-        {
-            ITaxServiceProviderBase provider = null;
-            switch (calculator)
-            {
-                case TaxCalculators.TaxJar:
-                    provider = new TaxServiceProvider.TaxJar.TaxServiceProvider();
-                    break;
-                default:
-                    break;
-            }
-
-            return provider;
+            _taxServiceProvider = taxServiceProvider;
         }
 
         /// <summary>
@@ -37,15 +22,15 @@ namespace TaxService
         public async Task<decimal> CalculateTax(TaxServiceRequest calculateTaxRequest)
         {
             // At minimum you need to have a sale amount, country, state, and zip code to determine the tax
-            if (calculateTaxRequest == null 
-                || calculateTaxRequest.SaleAmount.Equals(0) 
-                || String.IsNullOrEmpty(calculateTaxRequest.Customer?.ZipCode) 
-                || String.IsNullOrEmpty(calculateTaxRequest.Customer?.Country)
-                || String.IsNullOrEmpty(calculateTaxRequest.Customer?.State))
+            if (calculateTaxRequest == null
+                || calculateTaxRequest.SaleAmount.Equals(0)
+                || String.IsNullOrEmpty(calculateTaxRequest.Customer.ZipCode)
+                || String.IsNullOrEmpty(calculateTaxRequest.Customer.Country)
+                || String.IsNullOrEmpty(calculateTaxRequest.Customer.State))
             {
                 throw new InvalidOperationException("Invalid Object Provided");
             }
-            return await taxServiceProvider.CalculateTax(calculateTaxRequest);
+            return await _taxServiceProvider.CalculateTax(calculateTaxRequest);
         }
 
         /// <summary>
@@ -59,7 +44,7 @@ namespace TaxService
             {
                 throw new InvalidOperationException("ZIP Code Required");
             }
-            return await taxServiceProvider.GetLocationTaxes(LocationTaxRatesRequest);
+            return await _taxServiceProvider.GetLocationTaxes(LocationTaxRatesRequest);
         }
 
     }

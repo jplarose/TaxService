@@ -1,29 +1,25 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TaxService.Models;
 using TaxService.Models.Models.Domain;
 using TaxServiceProvider.TaxJar.Models;
 
 namespace TaxServiceProvider.TaxJar
 {
-    public class TaxServiceProvider: TaxServiceProviderBase
+    public class TaxJarServiceProvider: ITaxServiceProvider
     {
-        public override TaxCalculators TaxCalculators => TaxCalculators.TaxJar;
-
         private RestClient client;
 
-        public TaxServiceProvider()
+        public TaxJarServiceProvider()
         {
             client = new RestClient("https://api.taxjar.com/v2");
             client.AddDefaultHeader("Authorization", "Bearer 5da2f821eee4035db4771edab942a4cc");
         }
 
 
-        public async override Task<decimal> CalculateTax(TaxServiceRequest request)
+        public async Task<decimal> CalculateTax(TaxServiceRequest request)
         {
             TaxJarCalculateTax_Model taxJarCalculateTax_Model = new TaxJarCalculateTax_Model
             {
@@ -46,7 +42,7 @@ namespace TaxServiceProvider.TaxJar
             return response.Tax.AmountToCollect;
         }
 
-        public async override Task<decimal> GetLocationTaxes(TaxServiceRequest request)
+        public async Task<decimal> GetLocationTaxes(TaxServiceRequest request)
         {
             // populate the URL if the optional Params are included
             string populatedURL = LocationTaxRatesURLBuilder(request);

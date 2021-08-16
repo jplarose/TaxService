@@ -1,15 +1,11 @@
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TaxService;
 using System.Threading.Tasks;
-using Moq;
 using Xunit;
 using TaxService.Models.Models.Domain;
-using TaxServiceProvider.TaxJar.Models;
+using TaxServiceProvider.TaxJar;
 
 namespace TaxServiceUnitTests
 {
-    //[TestClass]
     public class CalculateTax_Tests
     {
         private class Setup
@@ -18,7 +14,7 @@ namespace TaxServiceUnitTests
 
             public Setup()
             {
-                taxServiceTaxJar = new TaxService.TaxService(TaxService.Models.TaxCalculators.TaxJar);
+                taxServiceTaxJar = new TaxService.TaxService(new TaxJarServiceProvider());
             }
 
             public TaxServiceRequest getvalidTaxServiceRequest()

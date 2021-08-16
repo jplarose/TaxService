@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxService", "TaxService\TaxService.csproj", "{3C4EB2A9-114B-4CDB-A858-50DCE66F6524}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxServiceUnitTests", "TaxServiceUnitTests\TaxServiceUnitTests.csproj", "{CC633102-62F5-4A70-A354-3C6A7ACEFF0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxService.Tests.Unit", "TaxServiceUnitTests\TaxService.Tests.Unit.csproj", "{CC633102-62F5-4A70-A354-3C6A7ACEFF0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxService.Models", "TaxService.Models\TaxService.Models.csproj", "{B0B8AE2C-74B7-474E-966C-4881CA301713}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxServiceProvider.TaxJar", "TaxServiceProvider.TaxJar\TaxServiceProvider.TaxJar.csproj", "{244B5333-0807-45A2-81A6-BE31426ED51E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxServiceProvider.TaxJar", "TaxServiceProvider.TaxJar\TaxServiceProvider.TaxJar.csproj", "{244B5333-0807-45A2-81A6-BE31426ED51E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaxService.Tests.Integration", "TaxServiceIntegrationTests\TaxService.Tests.Integration.csproj", "{4144BAF8-E225-4C28-B3F7-ECCDBDBA5D14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{244B5333-0807-45A2-81A6-BE31426ED51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{244B5333-0807-45A2-81A6-BE31426ED51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{244B5333-0807-45A2-81A6-BE31426ED51E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4144BAF8-E225-4C28-B3F7-ECCDBDBA5D14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4144BAF8-E225-4C28-B3F7-ECCDBDBA5D14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4144BAF8-E225-4C28-B3F7-ECCDBDBA5D14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4144BAF8-E225-4C28-B3F7-ECCDBDBA5D14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

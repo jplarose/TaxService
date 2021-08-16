@@ -6,7 +6,7 @@ namespace TaxService.Models.Models.Domain
 {
     public class TaxServiceRequest
     {
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } = new Customer();
         public decimal SaleAmount { get; set; }
         public decimal Shipping { get; set; }
     }

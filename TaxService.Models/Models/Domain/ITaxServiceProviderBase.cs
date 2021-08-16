@@ -2,7 +2,7 @@
 
 namespace TaxService.Models.Models.Domain
 {
-    public interface ITaxServiceProviderBase
+    public interface ITaxServiceProvider
     {
         Task<decimal> CalculateTax(TaxServiceRequest request);
         Task<decimal> GetLocationTaxes(TaxServiceRequest request);
