@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace TaxService.Models.Models.Domain
 {
-    public class TaxServiceRequest
+    public class CalculateTaxRequest
     {
         public Customer Customer { get; set; } = new Customer();
         public decimal SaleAmount { get; set; }

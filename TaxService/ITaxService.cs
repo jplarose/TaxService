@@ -5,7 +5,7 @@ namespace TaxService
 {
     public interface ITaxService
     {
-        Task<decimal> CalculateTax(TaxServiceRequest calculateTaxRequest);
-        Task<decimal> GetLocationTaxRates(TaxServiceRequest LocationTaxRatesRequest);
+        Task<decimal> CalculateTax(CalculateTaxRequest calculateTaxRequest);
+        Task<decimal> GetLocationTaxRates(GetLocationTaxRateRequest LocationTaxRatesRequest);
     }
 }

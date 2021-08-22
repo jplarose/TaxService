@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TaxService.Models;
 using TaxService.Models.Models.Domain;
 
 namespace TaxService
@@ -19,7 +18,7 @@ namespace TaxService
         /// </summary>
         /// <param name="calculateTaxRequest"></param>
         /// <returns>A decimal representation of tax calculated based on the information provided</returns>
-        public async Task<decimal> CalculateTax(TaxServiceRequest calculateTaxRequest)
+        public async Task<decimal> CalculateTax(CalculateTaxRequest calculateTaxRequest)
         {
             // At minimum you need to have a sale amount, country, state, and zip code to determine the tax
             if (calculateTaxRequest == null
@@ -38,9 +37,9 @@ namespace TaxService
         /// </summary>
         /// <param name="LocationTaxRatesRequest"></param>
         /// <returns>A decimal representation of the tax for the specified location</returns>
-        public async Task<decimal> GetLocationTaxRates(TaxServiceRequest LocationTaxRatesRequest)
+        public async Task<decimal> GetLocationTaxRates(GetLocationTaxRateRequest LocationTaxRatesRequest)
         {
-            if (String.IsNullOrEmpty(LocationTaxRatesRequest.Customer.ZipCode))
+            if (String.IsNullOrEmpty(LocationTaxRatesRequest.ZipCode))
             {
                 throw new InvalidOperationException("ZIP Code Required");
             }

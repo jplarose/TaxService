@@ -19,7 +19,7 @@ namespace TaxServiceProvider.TaxJar
         }
 
 
-        public async Task<decimal> CalculateTax(TaxServiceRequest request)
+        public async Task<decimal> CalculateTax(CalculateTaxRequest request)
         {
             TaxJarCalculateTax_Model taxJarCalculateTax_Model = new TaxJarCalculateTax_Model
             {
@@ -42,7 +42,7 @@ namespace TaxServiceProvider.TaxJar
             return response.Tax.AmountToCollect;
         }
 
-        public async Task<decimal> GetLocationTaxes(TaxServiceRequest request)
+        public async Task<decimal> GetLocationTaxes(GetLocationTaxRateRequest request)
         {
             // populate the URL if the optional Params are included
             string populatedURL = LocationTaxRatesURLBuilder(request);
@@ -58,29 +58,29 @@ namespace TaxServiceProvider.TaxJar
         /// Method to add the additional optional parameters to the GET request URL
         /// </summary>
         /// <param name="taxJarRatesRequest_Model"></param>
-        private string LocationTaxRatesURLBuilder(TaxServiceRequest request)
+        private string LocationTaxRatesURLBuilder(GetLocationTaxRateRequest request)
         {
             StringBuilder urlBuilder = new StringBuilder();
             List<string> parametersToAdd = new List<string>();
 
-            if (!string.IsNullOrEmpty(request.Customer.Country))
+            if (!string.IsNullOrEmpty(request.Country))
             {
-                parametersToAdd.Add($"country={request.Customer.Country}");
+                parametersToAdd.Add($"country={request.Country}");
             }
-            if (!string.IsNullOrEmpty(request.Customer.City))
+            if (!string.IsNullOrEmpty(request.City))
             {
-                parametersToAdd.Add($"city={request.Customer.City}");
+                parametersToAdd.Add($"city={request.City}");
             }
-            if (!string.IsNullOrEmpty(request.Customer.State))
+            if (!string.IsNullOrEmpty(request.State))
             {
-                parametersToAdd.Add($"state={request.Customer.State}");
+                parametersToAdd.Add($"state={request.State}");
             }
-            if (!string.IsNullOrEmpty(request.Customer.StreetAddress))
+            if (!string.IsNullOrEmpty(request.StreetAddress))
             {
-                parametersToAdd.Add($"street={request.Customer.StreetAddress}");
+                parametersToAdd.Add($"street={request.StreetAddress}");
             }
 
-            urlBuilder.Append((parametersToAdd.Count > 0) ? $"{request.Customer.ZipCode}?" : request.Customer.ZipCode);
+            urlBuilder.Append((parametersToAdd.Count > 0) ? $"{request.ZipCode}?" : request.ZipCode);
 
             for (int index = 0; index < parametersToAdd.Count; index++)
             {
