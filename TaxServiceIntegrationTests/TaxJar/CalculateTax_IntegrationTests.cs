@@ -23,6 +23,8 @@ namespace TaxService.Tests.Integration.TaxJar
                 {
                     SaleAmount = 15,
                     Shipping = 1.5m,
+                    FromZipCode = "04062",
+                    FromState = "ME",
                     Customer = new Customer
                     {
                         ZipCode = "04062",

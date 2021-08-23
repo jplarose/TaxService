@@ -29,7 +29,9 @@ namespace TaxServiceProvider.TaxJar
                 ToCity = request.Customer.City,
                 ToState = request.Customer.State,
                 ToZip = request.Customer.ZipCode,
-                ToCountry = request.Customer.Country
+                ToCountry = request.Customer.Country,
+                FromZip = request.FromZipCode,
+                FromState = request.FromState
             };
 
             string jsonBody = JsonConvert.SerializeObject(taxJarCalculateTax_Model);
