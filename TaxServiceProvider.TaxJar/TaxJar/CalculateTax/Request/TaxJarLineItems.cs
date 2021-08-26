@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TaxServiceProvider.TaxJar.Models
 {
     public class TaxJarLineItems
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [JsonProperty("quantity")]
-        public string Quantity { get; set; }
+        public string? Quantity { get; set; }
 
         [JsonProperty("product_tax_code")]
-        public string ProductTaxCode { get; set; }
+        public string? ProductTaxCode { get; set; }
 
         [JsonProperty("unit_price")]
-        public string UnitPrice { get; set; }
+        public string? UnitPrice { get; set; }
 
         [JsonProperty("discount")]
-        public string Discount { get; set; }
+        public string? Discount { get; set; }
     }
 }

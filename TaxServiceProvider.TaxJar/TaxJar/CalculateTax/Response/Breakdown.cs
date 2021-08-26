@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace TaxServiceProvider.TaxJar.Models
@@ -55,7 +53,7 @@ namespace TaxServiceProvider.TaxJar.Models
         public decimal SpecialDistrictTaxCollectable { get; set; }
 
         [JsonProperty("line_items")]
-        public List<LineItem> LineItems { get; set; }
+        public List<LineItem> LineItems { get; set; } = new List<LineItem>();
 
         // Canada specific fields
 

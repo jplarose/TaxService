@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TaxServiceProvider.TaxJar.Models
 {
     public class LineItem
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [JsonProperty("taxable_amount")]
         public decimal TaxableAmount { get; set; }

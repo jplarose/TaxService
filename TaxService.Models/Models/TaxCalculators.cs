@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TaxService.Models
+﻿namespace TaxService.Models
 {
     /// <summary>
     /// Extendable list of the available Tax Calculators

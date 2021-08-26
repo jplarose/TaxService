@@ -41,6 +41,8 @@ namespace TaxServiceProvider.TaxJar
 
             var response = await client.PostAsync<TaxJarCalculateTaxResponse_Model>(restRequest);
 
+            var response2 = await client.ExecuteAsync(restRequest);
+
             return response.Tax.AmountToCollect;
         }
 

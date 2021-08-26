@@ -4,7 +4,7 @@ using TaxService.Models.Models.Domain;
 
 namespace TaxService
 {
-    public class TaxService : ITaxService
+    public class TaxService
     {
         readonly ITaxServiceProvider _taxServiceProvider;
 
@@ -18,17 +18,17 @@ namespace TaxService
         /// </summary>
         /// <param name="calculateTaxRequest"></param>
         /// <returns>A decimal representation of tax calculated based on the information provided</returns>
+        /// <exception cref="ArgumentException"></exception>
         public async Task<decimal> CalculateTax(CalculateTaxRequest calculateTaxRequest)
         {
-            // At minimum you need to have a sale amount, country, state, and zip code to determine the tax
-            if (calculateTaxRequest == null
-                || calculateTaxRequest.SaleAmount.Equals(0)
-                || String.IsNullOrEmpty(calculateTaxRequest.Customer.ZipCode)
-                || String.IsNullOrEmpty(calculateTaxRequest.Customer.Country)
-                || String.IsNullOrEmpty(calculateTaxRequest.Customer.State))
+            if (calculateTaxRequest == null)
             {
-                throw new InvalidOperationException("Invalid Object Provided");
+                throw new ArgumentException($"{calculateTaxRequest} cannot be null");
             }
+
+            // At minimum you need to have a sale amount, country, state, and zip code to determine the tax
+            calculateTaxRequest.Validate();
+
             return await _taxServiceProvider.CalculateTax(calculateTaxRequest);
         }
 
@@ -37,13 +37,14 @@ namespace TaxService
         /// </summary>
         /// <param name="LocationTaxRatesRequest"></param>
         /// <returns>A decimal representation of the tax for the specified location</returns>
-        public async Task<decimal> GetLocationTaxRates(GetLocationTaxRateRequest LocationTaxRatesRequest)
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<decimal> GetLocationTaxRates(GetLocationTaxRateRequest locationTaxRatesRequest)
         {
-            if (String.IsNullOrEmpty(LocationTaxRatesRequest.ZipCode))
+            if (String.IsNullOrEmpty(locationTaxRatesRequest.ZipCode))
             {
-                throw new InvalidOperationException("ZIP Code Required");
+                throw new ArgumentException("ZIP Code Required");
             }
-            return await _taxServiceProvider.GetLocationTaxes(LocationTaxRatesRequest);
+            return await _taxServiceProvider.GetLocationTaxes(locationTaxRatesRequest);
         }
 
     }

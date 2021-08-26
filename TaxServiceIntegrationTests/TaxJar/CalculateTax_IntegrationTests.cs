@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TaxService.Models.Models.Domain;
 using TaxServiceProvider.TaxJar;
 using Xunit;
@@ -10,27 +9,26 @@ namespace TaxService.Tests.Integration.TaxJar
     {
         private class Setup
         {
-            public readonly TaxService _taxServiceTaxJar;
+            public readonly TaxJarServiceProvider _taxJarService;
 
             public Setup()
             {
-                _taxServiceTaxJar = new TaxService(new TaxJarServiceProvider());
+                _taxJarService = new TaxJarServiceProvider();
             }
 
             public CalculateTaxRequest getvalidTaxServiceRequest()
             {
-                return new CalculateTaxRequest()
+                return new CalculateTaxRequest(new Customer
+                {
+                    ZipCode = "04062",
+                    Country = "US",
+                    State = "ME"
+                })
                 {
                     SaleAmount = 15,
                     Shipping = 1.5m,
                     FromZipCode = "04062",
-                    FromState = "ME",
-                    Customer = new Customer
-                    {
-                        ZipCode = "04062",
-                        Country = "US",
-                        State = "ME"
-                    }
+                    FromState = "ME"
                 };
             }
         }
@@ -44,94 +42,10 @@ namespace TaxService.Tests.Integration.TaxJar
             var mockCalculateTaxRequest = setup.getvalidTaxServiceRequest();
 
             // Act
-            var response = await setup._taxServiceTaxJar.CalculateTax(mockCalculateTaxRequest);
+            var response = await setup._taxJarService.CalculateTax(mockCalculateTaxRequest);
 
             // Assert
             Assert.NotEqual(0, response);
         }
-
-        [Fact(DisplayName = "InvalidTaxRequestObject")]
-        [Trait("Category", "IntegrationTest")]
-        public async Task InvalidTaxRequestObject()
-        {
-            var setup = new Setup();
-            CalculateTaxRequest request = null;
-
-            // No request object passed in, returns exception
-            await Assert.ThrowsAsync<InvalidOperationException>(() => setup._taxServiceTaxJar.CalculateTax(request));
-        }
-
-        [Fact(DisplayName = "InvalidTaxRequestObject_NoAmountGiven")]
-        [Trait("Category", "IntegrationTest")]
-        public async Task InvalidTaxRequestObject_NoAmountGiven()
-        {
-            var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest()
-            {
-                Customer = new Customer
-                {
-                    ZipCode = "04062"
-                }
-            };
-
-            // Invalid object passed in, returns exception
-            await Assert.ThrowsAsync<InvalidOperationException>(() => setup._taxServiceTaxJar.CalculateTax(request));
-        }
-
-        [Fact(DisplayName = "InvalidTaxRequestObject_NoZIPGiven")]
-        [Trait("Category", "IntegrationTest")]
-        public async Task InvalidTaxRequestObject_NoZIPGiven()
-        {
-            var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest()
-            {
-                SaleAmount = 15
-            };
-
-            // Invalid object passed in, returns exception
-            await Assert.ThrowsAsync<InvalidOperationException>(() => setup._taxServiceTaxJar.CalculateTax(request));
-        }
-
-        [Fact(DisplayName = "InvalidTaxRequestObject_NoCountryGiven")]
-        [Trait("Category", "IntegrationTest")]
-        public async Task InvalidTaxRequestObject_NoCountryGiven()
-        {
-            var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest()
-            {
-                SaleAmount = 15,
-                Shipping = 1,
-                Customer = new Customer
-                {
-                    ZipCode = "04062",
-                    State = "ME"
-                }
-            };
-
-            await Assert.ThrowsAsync<InvalidOperationException>(() => setup._taxServiceTaxJar.CalculateTax(request));
-        }
-
-        [Fact(DisplayName = "InvalidTaxRequestObject_NoStateGiven")]
-        [Trait("Category", "IntegrationTest")]
-        public async Task InvalidTaxRequestObject_NoStateGiven()
-        {
-            var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest()
-            {
-                SaleAmount = 15,
-                Shipping = 1,
-                Customer = new Customer
-                {
-                    ZipCode = "04062",
-                    Country = "US"
-                }
-            };
-
-            await Assert.ThrowsAsync<InvalidOperationException>(() => setup._taxServiceTaxJar.CalculateTax(request));
-        }
-
-
-
-
     }
 }

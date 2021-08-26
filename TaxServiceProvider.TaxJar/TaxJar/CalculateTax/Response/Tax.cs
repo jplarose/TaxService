@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TaxServiceProvider.TaxJar.Models
 {
@@ -29,15 +26,15 @@ namespace TaxServiceProvider.TaxJar.Models
         public bool FreightTaxable { get; set; }
 
         [JsonProperty("tax_source")]
-        public string TaxSource { get; set; }
+        public string TaxSource { get; set; } = string.Empty;
 
         [JsonProperty("exemption_type")]
-        public string ExemptionType { get; set; }
+        public string ExemptionType { get; set; } = string.Empty;
 
         [JsonProperty("jurisdictions")]
-        public Jurisdictions Jurisdictions { get; set; }
+        public Jurisdictions Jurisdictions { get; set; } = new Jurisdictions();
 
         [JsonProperty("breakdown")]
-        public Breakdown Breakdown { get; set; }
+        public Breakdown Breakdown { get; set; } = new Breakdown();
     }
 }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TaxServiceProvider.TaxJar.Models
 {
     public class TaxJarRatesResponse_Model
     {
         [JsonProperty("rate")]
-        public RatesResponseAttributes Rate { get; set; }
+        public RatesResponseAttributes Rate { get; set; } = new RatesResponseAttributes();
     }
 
     public class RatesResponseAttributes
@@ -16,28 +13,28 @@ namespace TaxServiceProvider.TaxJar.Models
         // Common Attributes
 
         [JsonProperty("zip")]
-        public string Zip { get; set; }
+        public string Zip { get; set; } = string.Empty;
 
         [JsonProperty("state")]
-        public string State { get; set; }
+        public string State { get; set; } = string.Empty;
 
         [JsonProperty("state_rate")]
         public decimal StateRate { get; set; }
 
         [JsonProperty("county")]
-        public string County { get; set; }
+        public string County { get; set; } = string.Empty;
 
         [JsonProperty("county_rate")]
         public decimal CountyRate { get; set; }
 
         [JsonProperty("country")]
-        public string Country { get; set; }
+        public string Country { get; set; } = string.Empty;
 
         [JsonProperty("country_rate")]
         public decimal CountryRate { get; set; }
 
         [JsonProperty("city")]
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         [JsonProperty("city_rate")]
         public decimal CityRate { get; set; }
@@ -54,7 +51,7 @@ namespace TaxServiceProvider.TaxJar.Models
         // European Union Specific
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonProperty("standard_rate")]
         public decimal StandardRate { get; set; }

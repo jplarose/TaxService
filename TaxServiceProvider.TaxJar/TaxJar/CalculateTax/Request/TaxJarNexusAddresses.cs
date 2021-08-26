@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace TaxServiceProvider.TaxJar.Models
 {
     public class TaxJarNexusAddresses
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [JsonProperty("country")]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [JsonProperty("zip")]
-        public string Zip { get; set; }
+        public string? Zip { get; set; }
 
         [JsonProperty("state")]
-        public string State { get; set; }
+        public string? State { get; set; }
 
         [JsonProperty("city")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [JsonProperty("street")]
-        public string Street { get; set; }
+        public string? Street { get; set; }
     }
 }
