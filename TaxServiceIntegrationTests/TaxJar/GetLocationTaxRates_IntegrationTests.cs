@@ -18,7 +18,7 @@ namespace TaxService.Tests.Integration.TaxJar
                 _taxService = new TaxJarServiceProvider();
             }
 
-            public GetLocationTaxRateRequest getMockTaxJarRatesRequest(string zip = null, string state = null, string city = null, string country = null, string street = null)
+            public GetLocationTaxRateRequest GetMockTaxJarRatesRequest(string zip = null, string state = null, string city = null, string country = null, string street = null)
             {
                 return new GetLocationTaxRateRequest()
                 {                 
@@ -37,7 +37,7 @@ namespace TaxService.Tests.Integration.TaxJar
         public async Task ValidLocationTaxRatesRequest()
         {
             Setup setup = new Setup();
-            var mockRatesRequest = setup.getMockTaxJarRatesRequest("04062");
+            var mockRatesRequest = setup.GetMockTaxJarRatesRequest("04062");
 
             decimal response = await setup._taxService.GetLocationTaxes(mockRatesRequest);
 

@@ -10,7 +10,7 @@ namespace TaxServiceProvider.TaxJar
 {
     public class TaxJarServiceProvider: ITaxServiceProvider
     {
-        private RestClient client;
+        private readonly RestClient client;
 
         public TaxJarServiceProvider()
         {
@@ -40,8 +40,6 @@ namespace TaxServiceProvider.TaxJar
             restRequest.AddJsonBody(jsonBody);
 
             var response = await client.PostAsync<TaxJarCalculateTaxResponse_Model>(restRequest);
-
-            var response2 = await client.ExecuteAsync(restRequest);
 
             return response.Tax.AmountToCollect;
         }

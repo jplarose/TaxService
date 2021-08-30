@@ -13,14 +13,14 @@ namespace TaxService.Tests.Unit
         private class Setup
         {
             public readonly TaxService taxServiceTaxJar;
-            Mock<ITaxServiceProvider> _mockService = new Mock<ITaxServiceProvider>();
+            readonly Mock<ITaxServiceProvider> _mockService = new Mock<ITaxServiceProvider>();
             public Setup(decimal desiredResponse)
             {
                 _mockService.Setup(m => m.GetLocationTaxes(It.IsAny<GetLocationTaxRateRequest>())).ReturnsAsync(desiredResponse);
                 taxServiceTaxJar = new TaxService(_mockService.Object);
             }
 
-            public GetLocationTaxRateRequest getMockTaxJarRatesRequest(string zip = null, string state = null, string city = null, string country = null, string street = null)
+            public GetLocationTaxRateRequest GetMockTaxJarRatesRequest(string zip = null, string state = null, string city = null, string country = null, string street = null)
             {
                 return new GetLocationTaxRateRequest()
                 {
@@ -39,11 +39,11 @@ namespace TaxService.Tests.Unit
         public async Task ValidLocationTaxRatesRequest()
         {
             Setup setup = new Setup(ValidResponse);
-            var mockRatesRequest = setup.getMockTaxJarRatesRequest("04062");
+            var mockRatesRequest = setup.GetMockTaxJarRatesRequest("04062");
 
             decimal response = await setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest);
 
-            Assert.Equal(0.055m, response);
+            Assert.Equal(ValidResponse, response);
         }
 
         [Fact(DisplayName = "LocationTaxRatesRequest_NoZIP")]
@@ -52,7 +52,7 @@ namespace TaxService.Tests.Unit
         {
 
             Setup setup = new Setup(0);
-            var mockRatesRequest = setup.getMockTaxJarRatesRequest();
+            var mockRatesRequest = setup.GetMockTaxJarRatesRequest();
 
             // No ZIP defined, it is a required field. Should throw NullReferenceException
             await Assert.ThrowsAsync<ArgumentException>(() => setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
@@ -63,7 +63,7 @@ namespace TaxService.Tests.Unit
         public async Task LocationTaxRatesRequest_NoZIPButOtherInfo()
         {
             Setup setup = new Setup(0);
-            var mockRatesRequest = setup.getMockTaxJarRatesRequest(null, "ME", null, "US");
+            var mockRatesRequest = setup.GetMockTaxJarRatesRequest(null, "ME", null, "US");
 
             // No ZIP defined, it is a required field. Should throw NullReferenceException
             await Assert.ThrowsAsync<ArgumentException>(() => setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest));
@@ -74,12 +74,12 @@ namespace TaxService.Tests.Unit
         public async Task LocationTaxRatesRequest_FullInfo()
         {
             Setup setup = new Setup(ValidResponse);
-            var mockRatesRequest = setup.getMockTaxJarRatesRequest("04062", "ME", "Windham", "US", "73 Whites Bridge Road");
+            var mockRatesRequest = setup.GetMockTaxJarRatesRequest("04062", "ME", "Windham", "US", "73 Whites Bridge Road");
 
 
             decimal response = await setup.taxServiceTaxJar.GetLocationTaxRates(mockRatesRequest);
 
-            Assert.Equal(0.055m, response);
+            Assert.Equal(ValidResponse, response);
 
         }
     }

@@ -16,7 +16,7 @@ namespace TaxService.Tests.Integration.TaxJar
                 _taxJarService = new TaxJarServiceProvider();
             }
 
-            public CalculateTaxRequest getvalidTaxServiceRequest()
+            public CalculateTaxRequest GetvalidTaxServiceRequest()
             {
                 return new CalculateTaxRequest(new Customer
                 {
@@ -39,7 +39,7 @@ namespace TaxService.Tests.Integration.TaxJar
         {
             // Arrange
             var setup = new Setup();
-            var mockCalculateTaxRequest = setup.getvalidTaxServiceRequest();
+            var mockCalculateTaxRequest = setup.GetvalidTaxServiceRequest();
 
             // Act
             var response = await setup._taxJarService.CalculateTax(mockCalculateTaxRequest);

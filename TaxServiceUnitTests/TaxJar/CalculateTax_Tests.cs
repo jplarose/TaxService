@@ -11,7 +11,7 @@ namespace TaxService.Tests.Unit
         private class Setup
         {
             public readonly TaxService _taxService;
-            Mock<ITaxServiceProvider> _mockTaxService = new Mock<ITaxServiceProvider>();
+            readonly Mock<ITaxServiceProvider> _mockTaxService = new Mock<ITaxServiceProvider>();
 
             public Setup()
             {
@@ -19,7 +19,7 @@ namespace TaxService.Tests.Unit
                 _taxService = new TaxService(_mockTaxService.Object);
             }
 
-            public CalculateTaxRequest getvalidTaxServiceRequest()
+            public CalculateTaxRequest GetvalidTaxServiceRequest()
             {
                 return new CalculateTaxRequest(new Customer
                 {
@@ -43,7 +43,7 @@ namespace TaxService.Tests.Unit
 
             // Arrange
             var setup = new Setup();
-            var mockCalculateTaxRequest = setup.getvalidTaxServiceRequest();
+            var mockCalculateTaxRequest = setup.GetvalidTaxServiceRequest();
 
             // Act
             var response = await setup._taxService.CalculateTax(mockCalculateTaxRequest);
@@ -68,10 +68,11 @@ namespace TaxService.Tests.Unit
         public async Task InvalidTaxRequestObject_NoAmountGiven()
         {
             var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest(new Customer
-            {
-                ZipCode = "04062"
-            });
+            CalculateTaxRequest request = new CalculateTaxRequest(
+                new Customer
+                {
+                    ZipCode = "04062"
+                });
 
             // Invalid object passed in, returns exception
             await Assert.ThrowsAsync<ArgumentException>(() => setup._taxService.CalculateTax(request));
@@ -96,11 +97,12 @@ namespace TaxService.Tests.Unit
         public async Task InvalidTaxRequestObject_NoCountryGiven()
         {
             var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest(new Customer
-            {
-                ZipCode = "04062",
-                State = "ME"
-            })
+            CalculateTaxRequest request = new CalculateTaxRequest(
+                new Customer
+                {
+                    ZipCode = "04062",
+                    State = "ME"
+                })
             {
                 SaleAmount = 15,
                 Shipping = 1
@@ -114,11 +116,12 @@ namespace TaxService.Tests.Unit
         public async Task InvalidTaxRequestObject_NoStateGiven()
         {
             var setup = new Setup();
-            CalculateTaxRequest request = new CalculateTaxRequest(new Customer
-            {
-                ZipCode = "04062",
-                Country = "US"
-            })
+            CalculateTaxRequest request = new CalculateTaxRequest(
+                new Customer
+                {
+                    ZipCode = "04062",
+                    Country = "US"
+                })
             {
                 SaleAmount = 15,
                 Shipping = 1
