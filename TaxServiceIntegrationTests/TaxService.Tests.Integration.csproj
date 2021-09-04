@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaxService\TaxService.csproj" />
+    <ProjectReference Include="..\TaxServiceProvider.TaxJar\TaxServiceProvider.TaxJar.csproj" />
   </ItemGroup>
 
 </Project>

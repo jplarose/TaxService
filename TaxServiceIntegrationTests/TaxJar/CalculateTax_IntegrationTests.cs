@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using TaxService.Exceptions;
 using TaxService.Models.Models.Domain;
 using TaxServiceProvider.TaxJar;
 using Xunit;
@@ -46,6 +48,18 @@ namespace TaxService.Tests.Integration.TaxJar
 
             // Assert
             Assert.NotEqual(0, response);
+        }
+
+        [Fact(DisplayName = "InvalidTaxCalculatorRequest")]
+        [Trait("Category", "IntegrationTest")]
+        public async Task InvalidTaxCalculatorRequest()
+        {
+            // Arrange
+            var setup = new Setup();
+            var mockCalculateTaxRequest = new CalculateTaxRequest();
+
+            // Assert
+            await Assert.ThrowsAsync<TaxServiceException>(() => setup._taxJarService.CalculateTax(mockCalculateTaxRequest));
         }
     }
 }

@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaxService.Models\TaxService.Models.csproj" />
-    <ProjectReference Include="..\TaxServiceProvider.TaxJar\TaxServiceProvider.TaxJar.csproj" />
   </ItemGroup>
 
 </Project>
