@@ -59,7 +59,7 @@ namespace TaxService.Tests.Integration.TaxJar
             var mockCalculateTaxRequest = new CalculateTaxRequest();
 
             // Assert
-            await Assert.ThrowsAsync<TaxServiceException>(() => setup._taxJarService.CalculateTax(mockCalculateTaxRequest));
+            await Assert.ThrowsAsync<CalculateTaxException>(() => setup._taxJarService.CalculateTax(mockCalculateTaxRequest));
         }
     }
 }

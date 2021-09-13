@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TaxService.Models.Models.Domain;
+using TaxService.Exceptions;
 
 namespace TaxService
 {
@@ -19,6 +20,7 @@ namespace TaxService
         /// <param name="calculateTaxRequest"></param>
         /// <returns>A decimal representation of tax calculated based on the information provided</returns>
         /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="CalculateTaxException"></exception>
         public async Task<decimal> CalculateTax(CalculateTaxRequest calculateTaxRequest)
         {
             if (calculateTaxRequest == null)
@@ -38,6 +40,7 @@ namespace TaxService
         /// <param name="LocationTaxRatesRequest"></param>
         /// <returns>A decimal representation of the tax for the specified location</returns>
         /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="GetLocationTaxException"></exception>"
         public async Task<decimal> GetLocationTaxRates(GetLocationTaxRateRequest locationTaxRatesRequest)
         {
             if (String.IsNullOrEmpty(locationTaxRatesRequest.ZipCode))

@@ -9,6 +9,7 @@ using TaxService.Models.Models.Domain;
 using TaxServiceProvider.TaxJar.Models;
 using Serilog;
 using TaxService.Exceptions;
+using System.Net;
 
 namespace TaxServiceProvider.TaxJar
 {
@@ -23,6 +24,7 @@ namespace TaxServiceProvider.TaxJar
             client.AddDefaultHeader("Authorization", "Bearer 5da2f821eee4035db4771edab942a4cc");
 
             cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.CancelAfter(100000);
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.EventLog("TaxJarService")
@@ -32,7 +34,6 @@ namespace TaxServiceProvider.TaxJar
 
         public async Task<decimal> CalculateTax(CalculateTaxRequest request)
         {
-            decimal taxToCollect;
             TaxJarCalculateTax_Model taxJarCalculateTax_Model = new TaxJarCalculateTax_Model
             {
                 Amount = request.SaleAmount,
@@ -53,37 +54,74 @@ namespace TaxServiceProvider.TaxJar
             
             try
             {
-                cancellationTokenSource.CancelAfter(100000);
                 var response = await client.ExecuteAsync(restRequest, Method.POST, cancellationTokenSource.Token);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    TaxJarCalculateTaxResponse_Model responseObject = JsonConvert.DeserializeObject<TaxJarCalculateTaxResponse_Model>(response.Content);
+                    TaxJarCalculateTaxResponse_Model responseObject = JsonConvert.DeserializeObject<TaxJarCalculateTaxResponse_Model>(response.Content) ?? throw new ArgumentException();
                     return responseObject.Tax.AmountToCollect;
                 }
                 else
                 {
-                    Log.Error($"TaxService did return a successful status. Status: {response.StatusCode} - {response.StatusDescription}");
-                    throw new TaxServiceException("");
+                    Log.Error($"TaxJar Calculate Tax did return a successful status. Status: {response.StatusCode} - {response.StatusDescription}");
+                    throw new CalculateTaxException($"The call to calculate tax wwas not successful, Status: {response.StatusDescription}");
                 }
             }
             catch (TaskCanceledException ex)
             {
-                Log.Error($"TaskCanceledException thrown due to timeout, message: {ex.Message}, Inner Exception: {ex.InnerException}, Stack Trace: {ex.StackTrace}");
-                throw new TimeoutException();
+                Log.Error($"TaskCanceledException thrown due to timeout, Message: {ex.Message}, Inner Exception: {ex.InnerException}, Stack Trace: {ex.StackTrace}");
+                throw new CalculateTaxException("TaxJar Calculate Tax request timed out.");
+            }
+            catch (ArgumentException)
+            {
+                Log.Error($"There was an error deserializing the response message, returned null");
+                throw new CalculateTaxException("TaxJar Calculate Tax Tax had an error deserializing the response message");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"TaxJar Calculate Tax failed, Message: {ex.Message}, Inner Exception: {ex.InnerException}, Stack: {ex.StackTrace}");
+                throw new CalculateTaxException($"The call to calculate tax was not successful, Status: {ex.Message}");
             }
         }
 
         public async Task<decimal> GetLocationTaxes(GetLocationTaxRateRequest request)
         {
-            // populate the URL if the optional Params are included
+            // populate the URL if the optional Params are included 
             string populatedURL = LocationTaxRatesURLBuilder(request);
 
             var restRequest = new RestRequest($"/rates/{populatedURL}", Method.GET);
 
-            var response = await client.GetAsync<TaxJarRatesResponse_Model>(restRequest);
+            try
+            {
+                //var response = await client.GetAsync<TaxJarRatesResponse_Model>(restRequest);
+                var response = await client.ExecuteAsync(restRequest, Method.GET, cancellationTokenSource.Token);
 
-            return response.Rate.CombinedRate;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    TaxJarRatesResponse_Model responseObject = JsonConvert.DeserializeObject<TaxJarRatesResponse_Model>(response.Content) ?? throw new ArgumentException();
+                    return responseObject.Rate.CombinedRate;
+                }
+                else
+                {
+                    Log.Error($"TaxJar Get Location Tax did return a successful status. Status: {response.StatusCode} - {response.StatusDescription}");
+                    throw new GetLocationTaxException($"The call to get location tax was not successful, Status: {response.StatusDescription}");
+                }
+            }
+            catch (TaskCanceledException ex)
+            {
+                Log.Error($"TaskCanceledException thrown due to timeout, Message: {ex.Message}, Inner Exception: {ex.InnerException}, Stack Trace: {ex.StackTrace}");
+                throw new GetLocationTaxException("TaxJar Get Location Tax request timed out.");
+            }
+            catch (ArgumentException)
+            {
+                Log.Error($"There was an error deserializing the response message, returned null");
+                throw new GetLocationTaxException("TaxJar Get Location Tax had an error deserializing the response message");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"TaxJar Get Location Tax failed, Message: {ex.Message}, Inner Exception: {ex.InnerException}, Stack: {ex.StackTrace}");
+                throw new GetLocationTaxException($"The call to Get Location Tax was not successful, Status: {ex.Message}");
+            }
         }
 
         /// <summary>
